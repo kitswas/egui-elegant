@@ -26,6 +26,8 @@ noto = ["dep:noto-fonts-dl"]
 [dev-dependencies]
 eframe = "0.35"
 noto-fonts-dl = { version = "0.1.2", features = ["hi", "bn"] }
+egui_kittest = { version = "0.35", features = ["wgpu", "snapshot"] }
+image = "0.24"
 
 [[example]]
 name = "noto_multilingual"
