@@ -7,10 +7,29 @@ A beautiful, minimal, and elegant UI component library for `egui`. Designed with
 
 ## Features
 
-- **Rich Aesthetics**: Pre-configured colors, dark/light modes, glassmorphism, and micro-animations.
+- **Rich Aesthetics**: Pre-configured colors, dark/light modes, and micro-animations.
 - **Unified `Elegant` Trait**: All components implement the `Elegant` marker trait.
 - **Optional `egui_flex` Integration**: When the `flex` feature is enabled, all components automatically become `FlexWidget`s and can be directly placed inside `Flex::horizontal()` or `Flex::vertical()` containers.
+- **Async Theme Streaming**: Enable the `async` feature to use `ElegantTheme::stream()` for real-time reactive OS theme updates.
 - **Responsive Sizing**: Sizing models similar to CSS limits (`min_width`, etc.) encoded directly into components natively for layout predictability.
+
+## Components
+
+Here are the components provided out-of-the-box, compatible with both native `egui` layouts and `egui_flex`.
+
+| Component | Image                          |
+| :-------- | -----------------------------: |
+| Accordion | ![](docs/images/accordion.png) |
+| Alert     | ![](docs/images/alert.png)     |
+| Avatar    | ![](docs/images/avatar.png)    |
+| Badges    | ![](docs/images/badges.png)    |
+| Buttons   | ![](docs/images/buttons.png)   |
+| Card      | ![](docs/images/card.png)      |
+| Dropdown  | ![](docs/images/dropdown.png)  |
+| Progress  | ![](docs/images/progress.png)  |
+| Skeleton  | ![](docs/images/skeleton.png)  |
+| Tabs      | ![](docs/images/tabs.png)      |
+| Toast     | ![](docs/images/toast.png)     |
 
 ## Setup
 
@@ -28,6 +47,9 @@ egui-elegant = { version = "0.1", features = ["flex"] }
 
 # Or with multilingual text support:
 egui-elegant = { version = "0.1", features = ["noto"] }
+
+# Or with async reactive theme streaming:
+egui-elegant = { version = "0.1", features = ["async"] }
 ```
 
 Initialize the theme in your eframe app:
@@ -70,4 +92,7 @@ cargo run -p egui-elegant --example showcase --features flex
 
 # Showcase with multilingual content
 cargo run -p egui-elegant --example noto_multilingual --features noto
+
+# Async reactive theme streaming
+cargo run -p egui-elegant --example async_theme --features async
 ```
