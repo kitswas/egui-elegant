@@ -166,7 +166,8 @@ impl ElegantTheme {
 		}
 	}
 
-	/// Override the primary color. By default, `ElegantTheme::build` uses the OS accent color.
+	/// Override the primary color.
+	/// By default, `ElegantTheme::build` uses the OS accent color.
 	pub fn with_primary(mut self, color: Color32) -> Self {
 		self.primary = color;
 		self
@@ -204,6 +205,10 @@ impl ElegantTheme {
 			}
 		});
 
+		Self::build_internal(is_dark, primary, font)
+	}
+
+	fn build_internal(is_dark: bool, primary: Color32, font: ElegantFont) -> Self {
 		let spacing = SpacingConfig::default();
 
 		if is_dark {
@@ -237,6 +242,54 @@ impl ElegantTheme {
 				spacing,
 			}
 		}
+	}
+
+	#[cfg(feature = "async")]
+	pub fn stream(
+		mode: ThemeMode,
+		font: impl Into<ElegantFont> + Clone,
+	) -> impl futures_core::Stream<Item = Self> {
+		use futures_lite::stream::{self, StreamExt};
+
+		let font = font.into();
+		let initial_theme = Self::build(mode, font.clone());
+
+		let prefs_stream = mundy::Preferences::stream(
+			mundy::Interest::ColorScheme | mundy::Interest::AccentColor,
+		);
+
+		let updates = prefs_stream.map(move |prefs| {
+			let is_dark = match mode {
+				ThemeMode::Dark => true,
+				ThemeMode::Light => false,
+				ThemeMode::System => {
+					matches!(prefs.color_scheme, mundy::ColorScheme::Dark)
+				},
+			};
+
+			let primary = prefs
+				.accent_color
+				.0
+				.map(|c| {
+					Color32::from_rgba_unmultiplied(
+						(c.red * 255.0) as u8,
+						(c.green * 255.0) as u8,
+						(c.blue * 255.0) as u8,
+						(c.alpha * 255.0) as u8,
+					)
+				})
+				.unwrap_or_else(|| {
+					if is_dark {
+						Color32::from_rgb(203, 166, 247)
+					} else {
+						Color32::from_rgb(87, 71, 71)
+					}
+				});
+
+			Self::build_internal(is_dark, primary, font.clone())
+		});
+
+		stream::once(initial_theme).chain(updates)
 	}
 
 	pub fn font_definitions(&self) -> FontDefinitions {
@@ -399,26 +452,33 @@ impl ElegantTheme {
 	}
 }
 
+use std::time::Duration;
+
 pub fn is_system_dark_mode() -> bool {
-	matches!(dark_light::detect(), Ok(dark_light::Mode::Dark))
-}
-
-#[cfg(target_os = "windows")]
-pub fn get_os_accent_color() -> Option<Color32> {
-	use winreg::{RegKey, enums::*};
-	let hkcu = RegKey::predef(HKEY_CURRENT_USER);
-	if let Ok(dwm) = hkcu.open_subkey("Software\\Microsoft\\Windows\\DWM") {
-		if let Ok(color_val) = dwm.get_value::<u32, _>("ColorizationColor") {
-			let r = ((color_val >> 16) & 0xFF) as u8;
-			let g = ((color_val >> 8) & 0xFF) as u8;
-			let b = (color_val & 0xFF) as u8;
-			return Some(Color32::from_rgb(r, g, b));
-		}
+	if let Some(prefs) = mundy::Preferences::once_blocking(
+		mundy::Interest::ColorScheme,
+		Duration::from_millis(50),
+	) {
+		matches!(prefs.color_scheme, mundy::ColorScheme::Dark)
+	} else {
+		false
 	}
-	None
 }
 
-#[cfg(not(target_os = "windows"))]
-fn get_os_accent_color() -> Option<Color32> {
-	None
+pub fn get_os_accent_color() -> Option<Color32> {
+	if let Some(prefs) = mundy::Preferences::once_blocking(
+		mundy::Interest::AccentColor,
+		Duration::from_millis(50),
+	) {
+		prefs.accent_color.0.map(|c| {
+			Color32::from_rgba_unmultiplied(
+				(c.red * 255.0) as u8,
+				(c.green * 255.0) as u8,
+				(c.blue * 255.0) as u8,
+				(c.alpha * 255.0) as u8,
+			)
+		})
+	} else {
+		None
+	}
 }

@@ -11,23 +11,26 @@ categories = ["gui"]
 exclude = [".github/", ".gitignore"]
 
 [dependencies]
-dark-light = "2.0.0"
 egui = "0.35"
 egui_flex = { version = "0.7.0", optional = true }
+futures-core = { version = "0.3.33", optional = true }
+futures-lite = { version = "2.6.1", optional = true }
+mundy = "0.2.3"
 noto-fonts-dl = { version = "0.1.2", optional = true }
-winreg = "0.56.0"
 
 [features]
 default = ["monaspace"]
 monaspace = []
 flex = ["dep:egui_flex"]
 noto = ["dep:noto-fonts-dl"]
+async = ["dep:futures-core", "dep:futures-lite"]
 
 [dev-dependencies]
 eframe = "0.35"
 noto-fonts-dl = { version = "0.1.2", features = ["hi", "bn"] }
 egui_kittest = { version = "0.35", features = ["wgpu", "snapshot"] }
 image = "0.24"
+pollster = "1.0.1"
 
 [[example]]
 name = "noto_multilingual"
@@ -36,3 +39,7 @@ required-features = ["noto"]
 [[example]]
 name = "showcase"
 required-features = ["flex"]
+
+[[example]]
+name = "async_theme"
+required-features = ["async"]

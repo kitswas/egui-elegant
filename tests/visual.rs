@@ -13,7 +13,8 @@ where
 		.with_size(egui::Vec2::new(800.0, 600.0))
 		.wgpu()
 		.build_ui(move |ui| {
-			let theme = ElegantTheme::build(ThemeMode::Light, ElegantFont::default());
+			let theme = ElegantTheme::build(ThemeMode::Light, ElegantFont::default())
+				.with_primary(egui::Color32::from_rgb(0, 118, 205));
 			theme.apply(ui.ctx());
 
 			let bg_color = theme.background;

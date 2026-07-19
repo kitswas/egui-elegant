@@ -20,16 +20,13 @@
 //! use egui_elegant::{ElegantButton, ElegantFont, ElegantTheme, ThemeMode, Variant};
 //!
 //! fn main() -> Result<(), eframe::Error> {
-//! 	eframe::run_simple_native("App", Default::default(), |ctx, _frame| {
-//! 		// 1. Apply the elegant theme
+//! 	let options = eframe::NativeOptions::default();
+//! 	eframe::run_ui_native("App", options, |ui, _frame| {
 //! 		let theme = ElegantTheme::build(ThemeMode::System, ElegantFont::default());
-//! 		theme.apply(ctx);
+//! 		theme.apply(ui.ctx());
 //!
-//! 		// 2. Build your UI
-//! 		egui::CentralPanel::default().show(ctx, |ui| {
-//! 			ui.heading("Hello Elegant!");
-//! 			ui.add(ElegantButton::new("Primary Action").variant(Variant::Primary));
-//! 		});
+//! 		ui.heading("Hello Elegant!");
+//! 		ui.add(ElegantButton::new("Primary Action").variant(Variant::Primary));
 //! 	})
 //! }
 //! ```
