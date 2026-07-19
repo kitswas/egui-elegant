@@ -18,9 +18,10 @@ pub struct AppState {
 	pub show_toast: bool,
 }
 
+#[allow(unused)]
 pub struct ShowcaseApp {
 	state: AppState,
-	tx: Sender<Message>,
+	tx: Sender<Message>, // Unused here, but the pattern is useful in a real app
 	rx: Receiver<Message>,
 	theme_mode: ThemeMode,
 	is_dark: bool,
