@@ -12,17 +12,17 @@ jobs:
   build-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      
+      - uses: actions/checkout@v7
+
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: wasm32-unknown-unknown
 
       - name: Install trunk
-        uses: jetli/trunk-action@v0.5.0
+        uses: jetli/trunk-action@v0.5.1
         with:
-          version: 'latest'
+          version: "latest"
 
       - name: Build Cargo Docs
         run: cargo doc --no-deps --all-features
@@ -39,7 +39,7 @@ jobs:
           echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=showcase/"></head><body>Redirecting to showcase...</body></html>' > deploy/index.html
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./deploy
