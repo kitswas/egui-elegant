@@ -166,6 +166,12 @@ impl ElegantTheme {
 		}
 	}
 
+	/// Override the primary color. By default, `ElegantTheme::build` uses the OS accent color.
+	pub fn with_primary(mut self, color: Color32) -> Self {
+		self.primary = color;
+		self
+	}
+
 	pub fn hover_color(&self, color: Color32) -> Color32 {
 		if self.is_dark {
 			tint_color(color, 0.15)
