@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>egui-elegant Showcase</title>
     <style>
         html, body {
             margin: 0; padding: 0; height: 100%; width: 100%;
-            background: #1e1e2e;
         }
         canvas {
             display: block;
@@ -15,13 +14,13 @@
             height: 100vh;
         }
     </style>
-<link rel="modulepreload" href="/egui-elegant/showcase/website-f97f68dc0b750842.js" crossorigin="anonymous" integrity="sha384-WNeukt4fE/gnt1Xav1hQnmkjfc5XLYEdWSzaAXFkwTChV17VZNGT6j7YVayZGA2F"><link rel="preload" href="/egui-elegant/showcase/website-f97f68dc0b750842_bg.wasm" crossorigin="anonymous" integrity="sha384-Oi1tmG3atUlfaM0jrdxsyw5cobRsXwOaA4Njui5pEXSciV70j4X4v7ZNxcySXuMO" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="/egui-elegant/showcase/website-9d5977be6f9a1668.js" crossorigin="anonymous" integrity="sha384-glcQHV7V4c0Ut81PCm940WIRFPes/L668OPyDMrNNoCzUiqWXuqpvyBlxMrs+lHe"><link rel="preload" href="/egui-elegant/showcase/website-9d5977be6f9a1668_bg.wasm" crossorigin="anonymous" integrity="sha384-Tb7VNr+NaDqbI89W8KzBkQwAQiSdCqQ8DQqrYtkBZbInjJGf6+yLSgFrGsAElkTY" as="fetch" type="application/wasm"></head>
 <body>
-    <canvas id="the_canvas"></canvas>
+    <canvas id="the_canvas">Loading...</canvas>
 
 <script type="module">
-import init, * as bindings from '/egui-elegant/showcase/website-f97f68dc0b750842.js';
-const wasm = await init({ module_or_path: '/egui-elegant/showcase/website-f97f68dc0b750842_bg.wasm' });
+import init, * as bindings from '/egui-elegant/showcase/website-9d5977be6f9a1668.js';
+const wasm = await init({ module_or_path: '/egui-elegant/showcase/website-9d5977be6f9a1668_bg.wasm' });
 
 
 window.wasmBindings = bindings;
