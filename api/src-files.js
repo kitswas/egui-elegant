@@ -1,0 +1,2 @@
+createSrcSidebar('[["egui_elegant",["",[],["accordion.rs","alert.rs","avatar.rs","badge.rs","button.rs","card.rs","dropdown.rs","inputs.rs","lib.rs","progress.rs","skeleton.rs","tabs.rs","taginput.rs","theme.rs","toast.rs","traits.rs"]]]]');
+//{"start":19,"fragment_lengths":[218]}
