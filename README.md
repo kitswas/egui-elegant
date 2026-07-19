@@ -2,6 +2,9 @@
 
 A beautiful, minimal, and elegant UI component library for `egui`. Designed with inspiration from modern web component libraries (like oat, shadcn/ui, and daisyUI) and brought to immediate-mode Rust.
 
+> [!NOTE]  
+> This is an experimental project.
+
 ## Features
 
 - **Rich Aesthetics**: Pre-configured colors, dark/light modes, glassmorphism, and micro-animations.
