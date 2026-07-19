@@ -4,12 +4,19 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -23,6 +30,9 @@ jobs:
         uses: jetli/trunk-action@v0.5.1
         with:
           version: "latest"
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v6
 
       - name: Build Cargo Docs
         run: cargo doc --no-deps --all-features
@@ -38,8 +48,18 @@ jobs:
           cp -r website/dist deploy/showcase
           echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=showcase/"></head><body>Redirecting to showcase...</body></html>' > deploy/index.html
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./deploy
+          path: "./deploy"
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
