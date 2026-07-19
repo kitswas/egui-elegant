@@ -18,6 +18,8 @@ noto-fonts-dl = { version = "0.1.2", optional = true }
 winreg = "0.56.0"
 
 [features]
+default = ["monaspace"]
+monaspace = []
 flex = ["dep:egui_flex"]
 noto = ["dep:noto-fonts-dl"]
 

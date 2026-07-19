@@ -17,12 +17,12 @@
 //!
 //! ```rust,no_run
 //! use eframe::egui;
-//! use egui_elegant::{ElegantButton, ElegantTheme, MonaspaceFont, ThemeMode, Variant};
+//! use egui_elegant::{ElegantButton, ElegantFont, ElegantTheme, ThemeMode, Variant};
 //!
 //! fn main() -> Result<(), eframe::Error> {
 //! 	eframe::run_simple_native("App", Default::default(), |ctx, _frame| {
 //! 		// 1. Apply the elegant theme
-//! 		let theme = ElegantTheme::build(ThemeMode::System, MonaspaceFont::Neon);
+//! 		let theme = ElegantTheme::build(ThemeMode::System, ElegantFont::default());
 //! 		theme.apply(ctx);
 //!
 //! 		// 2. Build your UI
@@ -66,8 +66,10 @@ pub use progress::Progress;
 pub use skeleton::Skeleton;
 pub use tabs::ElegantTabs;
 pub use taginput::ElegantTagInput;
+#[cfg(feature = "monaspace")]
+pub use theme::MonaspaceFont;
 pub use theme::{
-	ElegantFont, ElegantTheme, MonaspaceFont, ThemeMode, Variant, get_os_accent_color,
+	ElegantFont, ElegantTheme, ThemeMode, Variant, get_os_accent_color,
 	is_system_dark_mode,
 };
 pub use toast::ElegantToast;

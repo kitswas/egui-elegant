@@ -1,7 +1,8 @@
 use egui::{
-	Color32, Context, CornerRadius, FontData, FontDefinitions, FontFamily, Id, Margin,
-	Stroke, Visuals,
+	Color32, Context, CornerRadius, FontDefinitions, Id, Margin, Stroke, Visuals,
 };
+#[cfg(any(feature = "monaspace", feature = "noto"))]
+use egui::{FontData, FontFamily};
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum ThemeMode {
@@ -27,6 +28,7 @@ impl Default for Variant {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
+#[cfg(feature = "monaspace")]
 pub enum MonaspaceFont {
 	Argon,
 	Krypton,
@@ -35,6 +37,7 @@ pub enum MonaspaceFont {
 	Xenon,
 }
 
+#[cfg(feature = "monaspace")]
 impl Default for MonaspaceFont {
 	fn default() -> Self {
 		Self::Neon
@@ -43,17 +46,31 @@ impl Default for MonaspaceFont {
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum ElegantFont {
+	#[cfg(feature = "monaspace")]
 	Monaspace(MonaspaceFont),
 	#[cfg(feature = "noto")]
 	Noto,
+	System,
 }
 
 impl Default for ElegantFont {
 	fn default() -> Self {
-		Self::Monaspace(MonaspaceFont::default())
+		#[cfg(feature = "monaspace")]
+		{
+			Self::Monaspace(MonaspaceFont::default())
+		}
+		#[cfg(all(not(feature = "monaspace"), feature = "noto"))]
+		{
+			Self::Noto
+		}
+		#[cfg(all(not(feature = "monaspace"), not(feature = "noto")))]
+		{
+			Self::System
+		}
 	}
 }
 
+#[cfg(feature = "monaspace")]
 impl From<MonaspaceFont> for ElegantFont {
 	fn from(font: MonaspaceFont) -> Self {
 		Self::Monaspace(font)
@@ -217,9 +234,11 @@ impl ElegantTheme {
 	}
 
 	pub fn font_definitions(&self) -> FontDefinitions {
+		#[allow(unused_mut)]
 		let mut fonts = FontDefinitions::default();
 
 		match self.font {
+			#[cfg(feature = "monaspace")]
 			ElegantFont::Monaspace(mf) => {
 				let font_bytes = match mf {
 					MonaspaceFont::Argon => {
@@ -273,18 +292,23 @@ impl ElegantTheme {
 						.push(name.clone());
 				}
 
-				// Provide Neon as the monospace fallback when Noto is used
-				let neon_bytes = include_bytes!("../assets/neon.ttf").as_slice();
-				fonts.font_data.insert(
-					"elegant_mono".to_owned(),
-					std::sync::Arc::new(FontData::from_static(neon_bytes)),
-				);
-				fonts
-					.families
-					.entry(FontFamily::Monospace)
-					.or_default()
-					.insert(0, "elegant_mono".to_owned());
+				// Provide Neon as the monospace fallback when Noto is used, if monaspace
+				// feature is enabled
+				#[cfg(feature = "monaspace")]
+				{
+					let neon_bytes = include_bytes!("../assets/neon.ttf").as_slice();
+					fonts.font_data.insert(
+						"elegant_mono".to_owned(),
+						std::sync::Arc::new(FontData::from_static(neon_bytes)),
+					);
+					fonts
+						.families
+						.entry(FontFamily::Monospace)
+						.or_default()
+						.insert(0, "elegant_mono".to_owned());
+				}
 			},
+			ElegantFont::System => {},
 		}
 
 		fonts
@@ -361,7 +385,9 @@ impl ElegantTheme {
 	pub fn get(ctx: &Context) -> Self {
 		ctx.data_mut(|d| {
 			d.get_temp(Id::new("elegant_theme")).unwrap_or_else(|| {
-				ElegantTheme::build(ThemeMode::Light, MonaspaceFont::Neon)
+				let theme = ElegantTheme::build(ThemeMode::Light, ElegantFont::default());
+				theme.apply(ctx);
+				theme
 			})
 		})
 	}
