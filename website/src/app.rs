@@ -3,14 +3,6 @@ use egui_elegant::{
 	egui_flex::{Flex, item},
 	*,
 };
-use std::{
-	sync::mpsc::{Receiver, channel},
-	time::Duration,
-};
-
-pub enum Message {
-	ThemeChanged(bool),
-}
 
 pub struct AppState {
 	pub sample_input: String,
@@ -23,33 +15,13 @@ pub struct AppState {
 
 pub struct ShowcaseApp {
 	state: AppState,
-	rx: Receiver<Message>,
-	theme_mode: ThemeMode,
-	is_dark: bool,
 }
 
 impl ShowcaseApp {
 	pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
-		let (tx, rx) = channel();
 		let theme_mode = ThemeMode::System;
 		let theme = ElegantTheme::build(theme_mode, MonaspaceFont::Xenon);
-		let is_dark = theme.is_dark;
 		theme.apply(&cc.egui_ctx);
-
-		let tx_clone = tx.clone();
-		let ctx_clone = cc.egui_ctx.clone();
-		std::thread::spawn(move || {
-			let mut last_is_dark = is_dark;
-			loop {
-				std::thread::sleep(Duration::from_secs(1));
-				let current_is_dark = is_system_dark_mode();
-				if current_is_dark != last_is_dark {
-					last_is_dark = current_is_dark;
-					let _ = tx_clone.send(Message::ThemeChanged(current_is_dark));
-					ctx_clone.request_repaint();
-				}
-			}
-		});
 
 		Self {
 			state: AppState {
@@ -60,28 +32,12 @@ impl ShowcaseApp {
 				selected_dropdown: "option1".to_string(),
 				show_toast: false,
 			},
-			rx,
-			theme_mode,
-			is_dark,
 		}
 	}
 }
 
 impl eframe::App for ShowcaseApp {
 	fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
-		while let Ok(msg) = self.rx.try_recv() {
-			match msg {
-				Message::ThemeChanged(is_dark) => {
-					if self.theme_mode == ThemeMode::System {
-						self.is_dark = is_dark;
-						let theme =
-							ElegantTheme::build(ThemeMode::System, MonaspaceFont::Neon);
-						theme.apply(ui.ctx());
-					}
-				},
-			}
-		}
-
 		egui::CentralPanel::default().show(ui, |ui| {
 			ui.vertical_centered(|ui| {
 				ui.add_space(40.0);

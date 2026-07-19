@@ -9,12 +9,14 @@ fn main() {
 	eframe::WebLogger::init(log::LevelFilter::Debug).ok();
 	let web_options = eframe::WebOptions::default();
 	wasm_bindgen_futures::spawn_local(async {
-		let document = web_sys::window().unwrap().document().unwrap();
-		let canvas = document
-			.get_element_by_id("the_canvas_id")
-			.unwrap()
+		let window = web_sys::window().expect("no global `window` exists");
+		let document = window.document().expect("should have a document on window");
+		let canvas_elem = document
+			.get_element_by_id("the_canvas")
+			.expect("Failed to find canvas with id 'the_canvas'");
+		let canvas = canvas_elem
 			.dyn_into::<web_sys::HtmlCanvasElement>()
-			.unwrap();
+			.expect("the_canvas was not a HtmlCanvasElement");
 
 		let start_result = eframe::WebRunner::new()
 			.start(
