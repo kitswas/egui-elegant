@@ -22,6 +22,9 @@ egui-elegant = { version = "0.1" }
 
 # Or with egui_flex integration:
 egui-elegant = { version = "0.1", features = ["flex"] }
+
+# Or with multilingual text support:
+egui-elegant = { version = "0.1", features = ["noto"] }
 ```
 
 Initialize the theme in your eframe app:
@@ -57,8 +60,11 @@ Run the showcases to see all components in action:
 
 ```bash
 # Showcase with native egui layouts
-cargo run --example showcase_noflex
+cargo run -p egui-elegant --example showcase_noflex
 
 # Showcase with egui_flex based wrapping layouts
-cargo run --example showcase --features flex
+cargo run -p egui-elegant --example showcase --features flex
+
+# Showcase with multilingual content
+cargo run -p egui-elegant --example noto_multilingual --features noto
 ```
