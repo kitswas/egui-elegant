@@ -45,6 +45,7 @@ jobs:
         run: |
           mkdir deploy
           cp -r target/doc deploy/api
+          echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=egui_elegant/"></head><body>Redirecting to API docs...</body></html>' > deploy/api/index.html
           cp -r website/dist deploy/showcase
           echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=showcase/"></head><body>Redirecting to showcase...</body></html>' > deploy/index.html
 
