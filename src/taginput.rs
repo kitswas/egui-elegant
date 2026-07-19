@@ -1,5 +1,4 @@
 use crate::{badge::ElegantBadge, theme::Variant, traits::Elegant};
-use egui;
 
 pub struct ElegantTagInput<'a> {
 	tags: &'a mut Vec<String>,

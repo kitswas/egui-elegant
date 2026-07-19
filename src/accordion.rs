@@ -1,5 +1,4 @@
 use crate::theme::ElegantTheme;
-use egui;
 
 pub struct ElegantAccordion<'a> {
 	title: &'a str,

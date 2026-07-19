@@ -1,5 +1,4 @@
 use crate::theme::{ElegantTheme, Variant};
-use egui;
 
 pub struct ElegantToast<'a> {
 	id_salt: egui::Id,
@@ -45,11 +44,13 @@ impl<'a> ElegantToast<'a> {
 			color.linear_multiply(0.1)
 		};
 
-		let mut frame = egui::Frame::default();
-		frame.fill = bg_color;
-		frame.stroke = egui::Stroke::new(1.0, color.linear_multiply(0.3));
-		frame.inner_margin = egui::Margin::same(16);
-		frame.corner_radius = egui::CornerRadius::same(8);
+		let frame = egui::Frame {
+			fill: bg_color,
+			stroke: egui::Stroke::new(1.0, color.linear_multiply(0.3)),
+			inner_margin: egui::Margin::same(16),
+			corner_radius: egui::CornerRadius::same(8),
+			..Default::default()
+		};
 
 		egui::Window::new(self.title)
 			.id(self.id_salt)

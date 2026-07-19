@@ -1,5 +1,4 @@
 use crate::{theme::ElegantTheme, traits::Elegant};
-use egui;
 
 pub struct Skeleton {
 	width: f32,

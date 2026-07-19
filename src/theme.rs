@@ -11,8 +11,9 @@ pub enum ThemeMode {
 	System,
 }
 
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Default)]
 pub enum Variant {
+	#[default]
 	Primary,
 	Secondary,
 	Success,
@@ -21,29 +22,18 @@ pub enum Variant {
 	Info,
 }
 
-impl Default for Variant {
-	fn default() -> Self {
-		Self::Primary
-	}
-}
-
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Default)]
 #[cfg(feature = "monaspace")]
 pub enum MonaspaceFont {
 	Argon,
 	Krypton,
+	#[default]
 	Neon,
 	Radon,
 	Xenon,
 }
 
 #[cfg(feature = "monaspace")]
-impl Default for MonaspaceFont {
-	fn default() -> Self {
-		Self::Neon
-	}
-}
-
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum ElegantFont {
 	#[cfg(feature = "monaspace")]
@@ -252,7 +242,7 @@ impl ElegantTheme {
 		use futures_lite::stream::{self, StreamExt};
 
 		let font = font.into();
-		let initial_theme = Self::build(mode, font.clone());
+		let initial_theme = Self::build(mode, font);
 
 		let prefs_stream = mundy::Preferences::stream(
 			mundy::Interest::ColorScheme | mundy::Interest::AccentColor,
@@ -286,7 +276,7 @@ impl ElegantTheme {
 					}
 				});
 
-			Self::build_internal(is_dark, primary, font.clone())
+			Self::build_internal(is_dark, primary, font)
 		});
 
 		stream::once(initial_theme).chain(updates)

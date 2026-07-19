@@ -1,3 +1,4 @@
+#![allow(clippy::tabs_in_doc_comments)]
 //! # egui-elegant
 //!
 //! A beautiful, minimal, and elegant UI component library for `egui`.

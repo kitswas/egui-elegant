@@ -1,5 +1,4 @@
 use crate::theme::ElegantTheme;
-use egui;
 
 pub struct ElegantDropdown<'a, T> {
 	id_salt: egui::Id,

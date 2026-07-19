@@ -1,5 +1,4 @@
 use crate::{theme::ElegantTheme, traits::Elegant};
-use egui;
 
 pub struct Progress {
 	value: f32, // 0.0 to 1.0

@@ -1,5 +1,4 @@
 use crate::theme::ElegantTheme;
-use egui;
 
 #[derive(Default)]
 pub struct Card {}

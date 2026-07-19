@@ -1,5 +1,4 @@
 use crate::{theme::ElegantTheme, traits::Elegant};
-use egui;
 
 pub struct Avatar<'a> {
 	text: &'a str,

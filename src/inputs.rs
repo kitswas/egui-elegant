@@ -1,5 +1,4 @@
 use crate::theme::ElegantTheme;
-use egui;
 
 pub trait InputUiExtensions {
 	fn text_input(&mut self, text: &mut String, placeholder: &str) -> egui::Response;

@@ -2,7 +2,6 @@ use crate::{
 	theme::{ElegantTheme, Variant},
 	traits::Elegant,
 };
-use egui;
 
 pub struct Alert<'a> {
 	title: &'a str,
