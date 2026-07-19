@@ -1,0 +1,18 @@
+[package]
+name = "website"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[workspace]
+
+[dependencies]
+egui = "0.35"
+eframe = "0.35"
+egui-elegant = { path = "..", features = ["flex"] }
+log = "0.4"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen-futures = "0.4"
+wasm-bindgen = "0.2"
+web-sys = { version = "0.3", features = ["HtmlCanvasElement", "Window", "Document", "Element"] }
